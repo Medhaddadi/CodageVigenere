@@ -12,6 +12,7 @@ public class CryptageVignere {
     public CryptageVignere(String textClair, String cle) {
     }
 
+    //cette function permet de convertir un texte en tableau de nombre des positions de chaque lettre dans l'alphabet
     public int[] codageNumerique(String text) {
         int[] tab = new int[text.length()];
         int i = 0;
@@ -21,7 +22,7 @@ public class CryptageVignere {
         }
         return tab;
     }
-
+    //cette function permet de convertir un tableau de nombre en texte en utilisant l'alphabet comme reference pour les lettres
     public String codageTexte(int[] tab) {
         String text = "";
         for (int i : tab) {
@@ -29,7 +30,7 @@ public class CryptageVignere {
         }
         return text;
     }
-
+//cette function permet de chiffrer un texte en utilisant la methode de vignere
     public String chiffrement(String textClair, String cle) {
         int[] tabClair = codageNumerique(textClair);
         int[] tabCle = codageNumerique(cle);
@@ -40,6 +41,7 @@ public class CryptageVignere {
         return codageTexte(tabChiffre);
     }
 
+    //cette function permet de dechiffrer un texte en utilisant la methode de vignere
     public String dechiffrement(String textChiffre, String cle) {
         int[] tabChiffre = codageNumerique(textChiffre);
         int[] tabCle = codageNumerique(cle);
@@ -50,11 +52,13 @@ public class CryptageVignere {
         return codageTexte(tabClair);
     }
 
+    //cette function permet de trouver la longueur de la cle en utilisant la methode de vignere
     public static int pgcd(int a, int b) {
         if (b == 0) return a;
         return pgcd(b, a % b);
     }
 
+    //cette function permet de trouver le pgcd des distances entre les repetitions d'une sequence de 3 lettres
     public static int pgcdDistancesEntreRepetitions(String texte, int i) {
         String sequence = texte.substring(i, i + 3);
         List<Integer> distances = new ArrayList<Integer>();
@@ -70,12 +74,14 @@ public class CryptageVignere {
             int pgcd = distances.get(0);
             for (int j = 1; j < distances.size(); j++) {
                 pgcd = pgcd(pgcd, distances.get(j));
+                nombreMaxilOperations++;
             }
             System.out.println("pgcd = " + pgcd);
             return pgcd;
         }
     }
 
+    //cette function permet de trouver la longueur de la cle en utilisant la methode de vignere
     public static int longueurCle(String texteCrypte) {
         int[] pgcds = new int[texteCrypte.length() - 3];
         for (int i = 0; i < texteCrypte.length() - 3; i++) {
@@ -89,6 +95,9 @@ public class CryptageVignere {
         return longueurCle;
     }
 
+
+
+    //cette function permet de supprimer les caracteres speciaux d'un texte et de le convertir en majuscule
     public static String removeSpecialCharacters(String text) {
         String newText = "";
         for (int i = 0; i < text.length(); i++) {
@@ -98,4 +107,18 @@ public class CryptageVignere {
         }
         return newText;
     }
+
+    //cette function permet de trouver la cle en utilisant la methode de vignere
+    public static String trouverCle(String texteCrypte, int longueurCle) {
+        String cle = "";
+        for (int i = 0; i < longueurCle; i++) {
+            String texte = "";
+            for (int j = i; j < texteCrypte.length(); j += longueurCle) {
+                texte += texteCrypte.charAt(j);
+            }
+            cle += trouverCle(texte, i);
+        }
+        return cle;
+    }
+
 }
